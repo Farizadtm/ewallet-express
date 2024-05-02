@@ -13,11 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id       Int    @id @default(autoincrement())
   name     String
-  username String
+  username String @unique
   password String
+  role     Role   @default(USER)
 
   Account     Account?
   Transaction Transaction[]
@@ -39,6 +45,7 @@ enum TransactionType {
 }
 
 enum TransactionStatus {
+  FAILED
   CANCEL
   PENDING
   FINISH
@@ -48,12 +55,13 @@ model Transaction {
   id  Int    @id @default(autoincrement())
   uid String @unique @default(uuid())
 
-  amount    Int               @default(0)
-  type      TransactionType
-  status    TransactionStatus
-  createdAt String            @default(dbgenerated("now()"))
-  cancelAt  String?
-  finishAt  String?
+  amount     Int               @default(0)
+  amountCode Int               @default(0)
+  type       TransactionType
+  status     TransactionStatus
+  createdAt  String            @default(dbgenerated("now()"))
+  cancelAt   String?
+  finishAt   String?
 
   userId    Int
   user      User      @relation(fields: [userId], references: [id])

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, 
+                   initial-scale=1.0"
+        />
+        <title>E-wallet</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    </head>
+
+    <body>
+        <div>
+            <h1>Admin Dashboard</h1>
+            <div>
+                <a href="/logout">LOGOUT</a>
+            </div>
+            <div>
+                <a href="/logout">CREATE USER</a>
+            </div>
+            <table style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Last Transaction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < data.length; i++){ %>
+                    <tr>
+                        <td><%= data[i].name %></td>
+                        <td><%= data[i].Account.amount %></td>
+                        <td><%= data[i].Account.updatedAt %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

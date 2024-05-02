@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, 
+                   initial-scale=1.0"
+        />
+        <title>E-wallet</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    </head>
+
+    <body>
+        <div>
+            <h1>Payment Service</h1>
+
+            <div class="grid-parent">
+                <div>
+                    <p>Halo, <%= data.name %></p>
+                    <p>Your balance :</p>
+                    <h3>Rp <%= data.Account.amount %></h3>
+
+                    <a href="/logout">LOGOUT</a>
+
+                    <h4>Transaction List</h4>
+                    <% for (let i = 0; i < data.Transaction.history.length; i++){ %>
+                    <div class="d-flex">
+                        <p><b>Tipe : </b> <%= data.Transaction.history[i].type %></p>
+                        <p><b>| Amount : </b> <%= data.Transaction.history[i].amount %></p>
+                        <p><b>| Status : </b> <%= data.Transaction.history[i].status %></p>
+                    </div>
+                    <% } %>
+                </div>
+                <div>
+                    <form action="/transaction/<%= data.id %>" method="post">
+                        <input type="radio" id="deposit" name="type" value="DEBIT" />
+                        <label for="deposit">Deposit</label><br />
+                        <input type="radio" id="withdrawal" name="type" value="KREDIT" />
+                        <label for="withdrawal">Withdrawal</label><br />
+                        <input type="number" placeholder="Input your amount" id="amount" name="amount" />
+
+                        <button onclick="alert('deposit / withdrawal berhasil')">Submit</button>
+                    </form>
+
+                    <h4>Payment pending</h4>
+                    <p>Jika ingin pembayaran berhasil, input sesuai angka yang ada di dalam kurung</p>
+                    <% for (let i = 0; i < data.Transaction.pending.length; i++){ %>
+                    <!-- <div class="d-flex"> -->
+                    <p>
+                        <%= i+1 %> <b>. Amount : </b> <%= data.Transaction.pending[i].amount %>
+                        <b> (<%= data.Transaction.pending[i].amountCode %>) </b>
+                    </p>
+                    <form action="/payment" method="post">
+                        <input id="amountCode" name="amountCode" />
+                        <input
+                            id="uid"
+                            name="uid"
+                            value="<%= data.Transaction.pending[i].uid %>"
+                            style="visibility: hidden"
+                        />
+                        <input id="userId" name="userId" value="<%= data.id %>" style="visibility: hidden" />
+                        <button onclick="alert('pembayaran berhasil')">Pay</button>
+                    </form>
+                    <!-- </div> -->
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

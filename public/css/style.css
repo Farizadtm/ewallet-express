@@ -1,0 +1,25 @@
+h3 {
+    color: red
+}
+
+.grid-parent {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.d-flex {
+    display: flex;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
