@@ -25,15 +25,15 @@ app.use(
 )
 
 app.get('/', async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            id: parseInt(1)
-        },
-        include: {
-            Account: true
-        }
-    })
-    res.render('index', { data: user })
+    // const user = await prisma.user.findUnique({
+    //     where: {
+    //         id: parseInt(1)
+    //     },
+    //     include: {
+    //         Account: true
+    //     }
+    // })
+    res.render('index')
 })
 
 app.post('/login', async (req, res) => {
@@ -153,17 +153,27 @@ app.get('/users/:id', async (req, res) => {
     }
 })
 
+app.get('/register', function (req, res) {
+    res.render('register')
+})
 // ADD
-app.post('/account/:userId', async (req, res) => {
+app.post('/user', async (req, res) => {
     try {
-        const { userId } = req.params
+        const { name, username, password } = req.body
+        const user = await prisma.user.create({
+            data: {
+                name: name,
+                username: username,
+                password: password
+            }
+        })
         const account = await prisma.account.create({
             data: {
-                userId: parseInt(userId),
+                userId: parseInt(user.id),
                 amount: 0
             }
         })
-        res.status(200).json({ data: account, message: 'berhasil' })
+        res.redirect('/admin')
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -258,6 +268,7 @@ app.post('/payment', async (req, res) => {
 
         if (!isValid) {
             res.redirect('/dashboard')
+            return
         }
 
         await Promise.all([
@@ -298,7 +309,7 @@ async function payThirdApp(transaction, amountCode) {
         }
 
         // Just fake post
-        await axios.post('https://yourdomain.com/deposit', data, { header: { header } })
+        axios.post('https://yourdomain.com/deposit', data, { header: { header } })
 
         const isValid = transaction.amountCode === parseInt(amountCode)
         const response = {
